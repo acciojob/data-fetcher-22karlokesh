@@ -12,9 +12,8 @@
 
 // export default App
 import React, { useEffect, useState } from "react";
-import "./../styles/App.css";
 
-const App = () => {
+const DataFetcher = () => {
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
@@ -23,36 +22,43 @@ const App = () => {
     fetch("https://dummyjson.com/products")
       .then((response) => {
         if (!response.ok) {
-          throw new Error("Network response was not ok");
+          throw new Error("Network error");
         }
         return response.json();
       })
       .then((json) => {
         if (!json || !json.products || json.products.length === 0) {
-          setData(null);
+          setData([]);
         } else {
-          setData(json);
+          setData(json.products);
         }
       })
       .catch((err) => {
-        setError("Error fetching data");
+        setError(err.message);
       })
       .finally(() => {
         setLoading(false);
       });
   }, []);
 
+  if (loading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error) {
+    return <div>An error occurred: {error}</div>;
+  }
+
+  if (Array.isArray(data) && data.length === 0) {
+    return <div>[]</div>;
+  }
+
   return (
     <div>
-      {/* Do not remove the main div */}
-      {loading && <p>Loading...</p>}
-      {!loading && error && <p>{error}</p>}
-      {!loading && !error && !data && <p>No data found</p>}
-      {!loading && !error && data && (
-        <pre>{JSON.stringify(data, null, 2)}</pre>
-      )}
+      <div>Data Fetched from API</div>
+      <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
 };
 
-export default App;
+export default DataFetcher;
