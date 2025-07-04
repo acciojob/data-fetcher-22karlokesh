@@ -5,28 +5,20 @@ const DataFetcher = () => {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    fetch("https://dummyjson.com/products")
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error("Network error");
-        }
-        return response.json();
-      })
-      .then((json) => {
-        if (!json || !json.products || json.products.length === 0) {
-          setData([]);
-        } else {
-          setData(json.products); // ✅ only array here
-        }
-      })
-      .catch((err) => {
-        setError(err.message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+ useEffect(() => {
+  fetch("https://dummyjson.com/products")
+    .then((res) => res.json())
+    .then((json) => {
+      setData(json.products); // ✅ only the array
+    })
+    .catch((err) => {
+      setError(err.message);
+    })
+    .finally(() => {
+      setLoading(false);
+    });
+}, []);
+
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div>An error occurred: {error}</div>;
