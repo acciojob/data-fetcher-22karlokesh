@@ -17,7 +17,7 @@ const DataFetcher = () => {
         if (!json || !json.products || json.products.length === 0) {
           setData([]);
         } else {
-          setData(json.products); // only array
+          setData(json.products); // ✅ only array here
         }
       })
       .catch((err) => {
