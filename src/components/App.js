@@ -12,7 +12,8 @@
 
 // export default App
 
-import 'regenerator-runtime/runtime';
+
+ import 'regenerator-runtime/runtime';
 import React, { useEffect, useState } from "react";
 
 function App() {
@@ -35,7 +36,7 @@ function App() {
         if (!jsonData || !jsonData.products || jsonData.products.length === 0) {
           setData([]);
         } else {
-          setData(jsonData.products);
+          setData(jsonData);  // ✅ store entire JSON object
         }
       } catch (err) {
         setError(err.message || "Something went wrong");
@@ -49,7 +50,7 @@ function App() {
 
   if (loading) return <div>Loading data...</div>;
   if (error) return <div>An error occurred: {error}</div>;
-  if (!data || data.length === 0) return <div>[]</div>;
+  if (!data || (data.products && data.products.length === 0)) return <div>[]</div>;
 
   return (
     <div>
@@ -60,3 +61,4 @@ function App() {
 }
 
 export default App;
+
