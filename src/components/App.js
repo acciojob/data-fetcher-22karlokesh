@@ -11,40 +11,44 @@
 // }
 
 // export default App
-
+import 'regenerator-runtime/runtime';
 import React, { useEffect, useState } from "react";
 
 function App() {
-  const [data, setData] = useState(null);  // State to hold fetched data
-  const [loading, setLoading] = useState(true); // State to track loading
-  const [error, setError] = useState(null); // State to track error
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     async function fetchData() {
       try {
         setLoading(true);
+        setError(null);
+
         const response = await fetch("https://dummyjson.com/products");
         if (!response.ok) {
           throw new Error("Network response was not ok");
         }
+
         const jsonData = await response.json();
-        setData(jsonData);
+        if (!jsonData || !jsonData.products || jsonData.products.length === 0) {
+          setData([]);
+        } else {
+          setData(jsonData.products);
+        }
       } catch (err) {
         setError(err.message || "Something went wrong");
       } finally {
         setLoading(false);
       }
     }
+
     fetchData();
   }, []);
 
-  if (loading) {
-    return <div>Loading data...</div>;
-  }
-
-  if (error) {
-    return <div>Error fetching data: {error}</div>;
-  }
+  if (loading) return <div>Loading data...</div>;
+  if (error) return <div>Error fetching data: {error}</div>;
+  if (!data || data.length === 0) return <div>No data found</div>;
 
   return (
     <div>
@@ -55,4 +59,3 @@ function App() {
 }
 
 export default App;
-
