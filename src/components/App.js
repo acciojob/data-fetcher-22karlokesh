@@ -11,6 +11,7 @@
 // }
 
 // export default App
+
 import 'regenerator-runtime/runtime';
 import React, { useEffect, useState } from "react";
 
@@ -47,12 +48,12 @@ function App() {
   }, []);
 
   if (loading) return <div>Loading data...</div>;
-  if (error) return <div>Error fetching data: {error}</div>;
-  if (!data || data.length === 0) return <div>No data found</div>;
+  if (error) return <div>An error occurred: {error}</div>;
+  if (!data || data.length === 0) return <div>[]</div>;
 
   return (
     <div>
-      <h1>Products Data</h1>
+      <h1>Data Fetched from API</h1>
       <pre>{JSON.stringify(data, null, 2)}</pre>
     </div>
   );
